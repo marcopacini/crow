@@ -19,7 +19,11 @@ namespace crow
 
         boost::asio::io_service& get_io_service()
         {
+            #if BOOST_VERSION >= 107000
+            return ((boost::asio::io_context&) socket_).get_executor().context();
+            #else
             return socket_.get_io_service();
+            #endif
         }
 
         tcp::socket& raw_socket()
@@ -96,7 +100,11 @@ namespace crow
 
         boost::asio::io_service& get_io_service()
         {
+            #if BOOST_VERSION >= 107000
+            return ((boost::asio::io_context&) raw_socket()).get_executor().context();
+            #else
             return raw_socket().get_io_service();
+            #endif
         }
 
         template <typename F> 
